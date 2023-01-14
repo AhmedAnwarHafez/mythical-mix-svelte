@@ -3,22 +3,37 @@
 export interface Typegen0 {
 	'@@xstate/typegen': true
 	internalEvents: {
+		'done.invoke.loadFromLocalStorage': {
+			type: 'done.invoke.loadFromLocalStorage'
+			data: unknown
+			__tip: 'See the XState TS docs to learn how to strongly type this.'
+		}
+		'error.platform.loadFromLocalStorage': {
+			type: 'error.platform.loadFromLocalStorage'
+			data: unknown
+		}
 		'xstate.init': { type: 'xstate.init' }
 	}
-	invokeSrcNameMap: {}
+	invokeSrcNameMap: {
+		loadFromLocalStorage: 'done.invoke.loadFromLocalStorage'
+	}
 	missingImplementations: {
 		actions: never
 		delays: never
 		guards: never
-		services: never
+		services: 'loadFromLocalStorage'
 	}
 	eventsCausingActions: {
 		addPerson: 'ADD_PERSON'
+		saveToLocalStorage: 'SAVE'
+		setPeople: 'done.invoke.loadFromLocalStorage'
 		shuffle: 'SHUFFLE'
 	}
 	eventsCausingDelays: {}
 	eventsCausingGuards: {}
-	eventsCausingServices: {}
-	matchesStates: 'Editing' | 'History Displayed' | 'Saved' | 'Shuffled' | 'Unshuffled'
+	eventsCausingServices: {
+		loadFromLocalStorage: 'xstate.init'
+	}
+	matchesStates: 'Editing' | 'History Displayed' | 'Loading' | 'Saved' | 'Shuffled' | 'Unshuffled'
 	tags: never
 }

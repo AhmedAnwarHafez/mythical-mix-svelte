@@ -2,11 +2,18 @@
 	import { quintOut } from 'svelte/easing'
 	import { crossfade } from 'svelte/transition'
 	import { flip } from 'svelte/animate'
-	import { data } from './people'
 	import { useMachine } from '@xstate/svelte'
-	import { machine } from '$lib/machine'
+	import { machine, type Person } from '$lib/machine'
 
-	const { state, send } = useMachine(machine)
+	const { state, send } = useMachine(machine, {
+		services: {
+			loadFromLocalStorage: async () => {
+				const item = localStorage.getItem('people') || '[]'
+				const people = JSON.parse(item) || ([] as Person[])
+				return people
+			},
+		},
+	})
 
 	const [sendAnimation, receive] = crossfade({
 		duration: (d) => Math.sqrt(d * 900),
@@ -25,8 +32,6 @@
 			}
 		},
 	})
-
-	let people = data
 
 	let shuffled = false
 
@@ -113,6 +118,7 @@
 			{#if $state.matches('Shuffled')}
 				<button
 					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
+					on:click={() => send('SAVE')}
 				>
 					<i class="fa-solid fa-save" />
 				</button>
