@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { quintOut } from 'svelte/easing'
 	import { crossfade } from 'svelte/transition'
 	import { flip } from 'svelte/animate'
@@ -21,134 +21,115 @@
 		},
 	})
 
+	type Person = {
+		id: number
+		name: string
+		team: number
+		toBeDeleted: boolean
+	}
 	// a list of 25 people with random names
 	let people = [
 		{
 			id: 1,
 			name: 'Bob',
-			team: -1,
 		},
 		{
 			id: 2,
 			name: 'Alice',
-			team: -1,
 		},
 		{
 			id: 3,
 			name: 'Dave',
-			team: -1,
 		},
 		{
 			id: 4,
 			name: 'Eve',
-			team: -1,
 		},
 		{
 			id: 5,
 			name: 'Frank',
-			team: -1,
 		},
 		{
 			id: 6,
 			name: 'Grace',
-			team: -1,
 		},
 		{
 			id: 7,
 			name: 'Heidi',
-			team: -1,
 		},
 		{
 			id: 8,
 			name: 'Ivan',
-			team: -1,
 		},
 		{
 			id: 9,
 			name: 'Judy',
-			team: -1,
 		},
 		{
 			id: 10,
 			name: 'Karl',
-			team: -1,
 		},
 		{
 			id: 11,
 			name: 'Linda',
-			team: -1,
 		},
 		{
 			id: 12,
 			name: 'Mike',
-			team: -1,
 		},
 		{
 			id: 13,
 			name: 'Nancy',
-			team: -1,
 		},
 		{
 			id: 14,
 			name: 'Oscar',
-			team: -1,
 		},
 		{
 			id: 15,
 			name: 'Peggy',
-			team: -1,
 		},
 		{
 			id: 16,
 			name: 'Quinn',
-			team: -1,
 		},
 		{
 			id: 17,
 			name: 'Robert',
-			team: -1,
 		},
 		{
 			id: 18,
 			name: 'Susan',
-			team: -1,
 		},
 		{
 			id: 19,
 			name: 'Tom',
-			team: -1,
 		},
 		{
 			id: 20,
 			name: 'Ursula',
-			team: -1,
 		},
 		{
 			id: 21,
 			name: 'Victor',
-			team: -1,
 		},
 		{
 			id: 22,
 			name: 'Wendy',
-			team: -1,
 		},
 		{
 			id: 23,
 			name: 'Xavier',
-			team: -1,
 		},
 		{
 			id: 24,
 			name: 'Yvonne',
-			team: -1,
 		},
 		{
 			id: 25,
 			name: 'Zach',
-			team: -1,
 		},
-	]
+	].map((person) => ({ ...person, toBeDeleted: false, team: -1 }))
 
 	let shuffled = false
 
@@ -178,6 +159,20 @@
 		})
 		shuffled = !shuffled
 	}
+
+	function confirmDelete(id: number) {
+		people = people.map((p) => {
+			if (p.id === id) {
+				p.toBeDeleted = true
+			}
+			return p
+		})
+	}
+
+	// delete a person from the list
+	function deletePerson(id: number) {
+		people = people.filter((p) => p.id !== id)
+	}
 </script>
 
 <section
@@ -192,9 +187,17 @@
 						in:receive={{ key: person.id }}
 						out:send={{ key: person.id }}
 						animate:flip
-						class="w-20 h-20 cursor-pointer flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
+						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
 					>
-						<span>{person.name}</span>
+						{#if person.toBeDeleted}
+							<button on:click={() => deletePerson(person.id)}>
+								<i class="fa-solid fa-trash" />
+							</button>
+						{:else}
+							<button on:click={() => confirmDelete(person.id)}>
+								<span>{person.name}</span>
+							</button>
+						{/if}
 					</li>
 				{/each}
 				<li
@@ -202,7 +205,7 @@
 				>
 					<i class="fa-solid fa-plus" />
 				</li>
-				<input type="text" class="bg-stone-300 text-3xl w-full text-stone-900" />
+				<!-- <input type="text" class="bg-stone-300 text-3xl w-full text-stone-900" /> -->
 			</ul>
 		</section>
 		<section class="self-center place-self-center flex flex-col items-center gap-4">
