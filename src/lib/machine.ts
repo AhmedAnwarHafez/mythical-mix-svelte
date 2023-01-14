@@ -55,6 +55,7 @@ export const machine = createMachine(
 					},
 					UNSHUFFLE: {
 						target: 'Unshuffled',
+						actions: ['unshuffle'],
 					},
 				},
 			},
@@ -135,6 +136,16 @@ export const machine = createMachine(
 			shuffle: assign({
 				people: (context) => {
 					return shuffle(context.people)
+				},
+			}),
+			unshuffle: assign({
+				people: (context) => {
+					return context.people.map((person) => {
+						return {
+							...person,
+							team: -1,
+						}
+					})
 				},
 			}),
 			saveToLocalStorage: (context) => {

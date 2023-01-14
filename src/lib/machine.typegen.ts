@@ -28,6 +28,7 @@ export interface Typegen0 {
 		saveToLocalStorage: 'SAVE'
 		setPeople: 'done.invoke.loadFromLocalStorage'
 		shuffle: 'SHUFFLE'
+		unshuffle: 'UNSHUFFLE'
 	}
 	eventsCausingDelays: {}
 	eventsCausingGuards: {}
