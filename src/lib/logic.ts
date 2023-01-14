@@ -9,9 +9,15 @@ let people = [
 	},
 ]
 
-export function shuffle<T>(people: T[]) {
+// shuffle the people into 5 teams
+export function shuffle<T>(people: T[], teams = 5): T[] {
 	// shuffle the people
-	return people.sort(() => Math.random() - 0.5)
+	const shuffledPeople = people.sort(() => Math.random() - 0.5)
+	// assign each person to a team
+	return shuffledPeople.map((person, index) => ({
+		...person,
+		team: index % teams,
+	}))
 }
 
 function confirmDelete(id: number) {

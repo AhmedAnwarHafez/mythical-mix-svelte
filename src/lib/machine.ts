@@ -134,11 +134,7 @@ export const machine = createMachine(
 			}),
 			shuffle: assign({
 				people: (context) => {
-					const shuffledPeople = shuffle(context.people)
-					return shuffledPeople.map((person, index) => ({
-						...person,
-						team: index % 2,
-					}))
+					return shuffle(context.people)
 				},
 			}),
 			saveToLocalStorage: (context) => {
