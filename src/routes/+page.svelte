@@ -48,7 +48,7 @@
 </script>
 
 <pre class="text-white text-5xl">{$state.value}</pre>
-<pre class="text-white text-2xl">{JSON.stringify($state.context)}</pre>
+<!-- <pre class="text-white text-2xl">{JSON.stringify($state.context)}</pre> -->
 <section
 	class="container mx-auto flex items-center justify-center h-screen bg-stone-800 text-white"
 >
@@ -98,13 +98,13 @@
 		</section>
 
 		<!-- Shuffle and Save -->
-		<section class="self-center place-self-center flex flex-col items-center gap-4">
+		<section class="self-center place-self-center flex flex-col items-center gap-6">
 			<p class="text-stone-100 text-xl tracking-widest">Mythical Mix</p>
 
 			<!-- big button in the center of the screeen -->
 			{#if $state.matches('Unshuffled') || $state.matches('Shuffled')}
 				<button
-					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-500
+					class="bg-stone-600 text-stone-100 rounded-full w-32 h-32 text-4xl flex items-center justify-center hover:text-xl hover:bg-stone-500
 				 hover:shadow-[0_0px_20px_1px_rgba(255,255,255,0.9)] hover:scale-110 transition-all duration-300"
 					on:click={() => {
 						shuffled ? send('UNSHUFFLE') : send('SHUFFLE')
@@ -129,7 +129,7 @@
 		<section class="col-start-3 col-end-4 flex flex-wrap justify-start">
 			{#each Array.from({ length: 5 }).map((_, i) => i) as team, idx}
 				<section class="rounded-lg m-4 basis-1/3 border border-stone-600 p-4">
-					<h1 class="text-2xl font-bold text-stone-300">Team {team + 1}</h1>
+					<h1 class="text-lg font-bold text-stone-300">Team {team + 1}</h1>
 					<ul class="mt-4 flex">
 						<!-- take five people -->
 						{#each $state.context.people.filter((person) => person.team === idx) as person (person.id)}
@@ -137,7 +137,7 @@
 								in:receive={{ key: person.id }}
 								out:sendAnimation={{ key: person.id }}
 								animate:flip
-								class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center m-2"
+								class="w-20 h-20 text-2xl flex items-center justify-center bg-stone-700 rounded-full text-center m-2"
 							>
 								<span>{person.name}</span>
 							</li>
