@@ -10,37 +10,31 @@
 	onMount(() => {
 		const item = localStorage.getItem('history') || '{}'
 		history = JSON.parse(item) as TeamHistory
-		const dates = Object.keys(history)
-
-		const teams = dates.map((date) => history[date])
-		console.log(teams)
 	})
 </script>
 
-<section
-	class="container mx-auto flex items-center justify-center h-screen bg-stone-800 text-white"
->
-	<section class="grid grid-col-6">
+<section class="mx-auto flex items-center justify-center bg-stone-800 text-white p-10">
+	<section class="flex flex-wrap gap-10">
 		{#each Object.keys(history) as date, week}
 			{@const currentDate = date}
 			{@const people = history[date]}
-			<section>
-				<div class=" p-2">
+			<section class="flex flex-col items-center border border-stone-600 rounded-xl p-4">
+				<div class=" p-2 text-center">
 					<p>{currentDate}</p>
 					<p>Week {week + 1}</p>
 				</div>
-				{#each history[date] as team, idx}
-					<div class="p-2">
-						<p>Team {idx + 1}</p>
-						<section class="flex flex-wrap">
+				<ul class="flex justify-center gap-3">
+					{#each history[date] as team, idx}
+						<li class="p-2  flex flex-col items-center">
+							<p class="text-center">Team {idx + 1}</p>
 							{#each team as person}
-								<span>
+								<li class="avatar mx-auto">
 									{person.name}
-								</span>
+								</li>
 							{/each}
-						</section>
-					</div>
-				{/each}
+						</li>
+					{/each}
+				</ul>
 			</section>
 		{/each}
 	</section>

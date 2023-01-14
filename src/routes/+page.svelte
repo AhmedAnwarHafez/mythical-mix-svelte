@@ -61,7 +61,7 @@
 						in:receive={{ key: person.id }}
 						out:sendAnimation={{ key: person.id }}
 						animate:flip
-						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
+						class="avatar"
 					>
 						{#if person.toBeDeleted}
 							<button>
@@ -146,7 +146,7 @@
 								in:receive={{ key: person.id }}
 								out:sendAnimation={{ key: person.id }}
 								animate:flip
-								class="w-20 h-20 text-2xl flex items-center justify-center bg-stone-700 rounded-full text-center m-2"
+								class="avatar"
 							>
 								<span>{person.name}</span>
 							</li>
