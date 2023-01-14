@@ -1,16 +1,17 @@
 <script>
 	import { quintOut } from 'svelte/easing'
 	import { crossfade } from 'svelte/transition'
+	import { flip } from 'svelte/animate'
 
 	const [send, receive] = crossfade({
-		duration: (d) => Math.sqrt(d * 200),
+		duration: (d) => Math.sqrt(d * 900),
 
 		fallback(node, params) {
 			const style = getComputedStyle(node)
 			const transform = style.transform === 'none' ? '' : style.transform
 
 			return {
-				duration: 600,
+				duration: 900,
 				easing: quintOut,
 				css: (t) => `
 					transform: ${transform} scale(${t});
@@ -149,11 +150,21 @@
 		},
 	]
 
+	let shuffled = false
+
 	// shuffle the people into 5 teams
 	function shuffle() {
+		if (shuffled) {
+			people = people.map((person) => {
+				person.team = -1
+				return person
+			})
+			shuffled = !shuffled
+			return
+		}
 		// reset the teams
 		people = people.map((person) => {
-			person.team = 0
+			person.team = -1
 			return person
 		})
 
@@ -165,6 +176,7 @@
 			person.team = Math.floor(index / 5)
 			return person
 		})
+		shuffled = !shuffled
 	}
 </script>
 
@@ -179,7 +191,8 @@
 					<li
 						in:receive={{ key: person.id }}
 						out:send={{ key: person.id }}
-						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
+						animate:flip
+						class="w-20 h-20 cursor-pointer flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
 					>
 						<span>{person.name}</span>
 					</li>
@@ -192,10 +205,12 @@
 				<input type="text" class="bg-stone-300 text-3xl w-full text-stone-900" />
 			</ul>
 		</section>
-		<section class="self-center place-self-center flex flex-col gap-4">
+		<section class="self-center place-self-center flex flex-col items-center gap-4">
+			<p class="text-stone-100 text-xl tracking-widest">Mythical Mix</p>
 			<!-- big button in the center of the screeen -->
 			<button
-				class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
+				class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-500
+				 hover:shadow-[0_0px_20px_1px_rgba(255,255,255,0.9)] hover:scale-110 transition-all duration-300"
 				on:click={shuffle}
 			>
 				<i class="fa-solid fa-shuffle" />
@@ -218,6 +233,7 @@
 							<li
 								in:receive={{ key: person.id }}
 								out:send={{ key: person.id }}
+								animate:flip
 								class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center m-2"
 							>
 								<span>{person.name}</span>
