@@ -151,13 +151,22 @@ export const machine = createMachine(
 			saveToLocalStorage: (context) => {
 				const today = new Date().toISOString().split('T')[0]
 				const history = JSON.parse(localStorage.getItem('history') || '[]')
-				const newHistory = [
+				// extract the teams from the people
+				// in this format [[person1, person2], [person3, person4]]
+				const teams = context.people.reduce((acc, person) => {
+					if (person.team === -1) {
+						return acc
+					}
+					if (!acc[person.team]) {
+						acc[person.team] = []
+					}
+					acc[person.team].push(person)
+					return acc
+				}, [] as Person[][])
+				const newHistory = {
 					...history,
-					{
-						date: today,
-						people: context.people,
-					},
-				]
+					[today]: teams,
+				}
 				localStorage.setItem('history', JSON.stringify(newHistory))
 			},
 		},

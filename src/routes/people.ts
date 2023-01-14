@@ -100,3 +100,7 @@ export const data = [
 		name: 'Zach',
 	},
 ].map((person) => ({ ...person, toBeDeleted: false, team: -1 }))
+
+export const storeInLocalStorage = () => {
+	localStorage.setItem('people', JSON.stringify(data))
+}
