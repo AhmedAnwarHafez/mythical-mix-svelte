@@ -115,6 +115,15 @@
 				</button>
 			{/if}
 
+			{#if $state.matches('Unshuffled')}
+				<a
+					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
+					href="/history"
+				>
+					<i class="fa-solid fa-history" />
+				</a>
+			{/if}
+
 			{#if $state.matches('Shuffled')}
 				<button
 					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
