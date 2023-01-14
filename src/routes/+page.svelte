@@ -4,7 +4,7 @@
 	import { flip } from 'svelte/animate'
 	import { data } from './people'
 	import { useMachine } from '@xstate/svelte'
-	import machine from '$lib/machine'
+	import { machine } from '$lib/machine'
 
 	const { state, send } = useMachine(machine)
 
@@ -29,8 +29,18 @@
 	let people = data
 
 	let shuffled = false
+
+	function handleEdit(e: KeyboardEvent) {
+		send('EDIT')
+		if (e.key === 'Enter') {
+			const target = e.target as HTMLInputElement
+			send('ADD_PERSON', { payload: { name: target.value } })
+		}
+	}
 </script>
 
+<pre class="text-white text-5xl">{$state.value}</pre>
+<pre class="text-white text-2xl">{JSON.stringify($state.context)}</pre>
 <section
 	class="container mx-auto flex items-center justify-center h-screen bg-stone-800 text-white"
 >
@@ -56,37 +66,55 @@
 						{/if}
 					</li>
 				{/each}
-				<!-- <li class="w-20 h-20 flex items-center justify-center   text-center mr-4 mb-4">
+
+				{#if $state.matches('Unshuffled')}
+					<li
+						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
+					>
+						<button on:click={() => send('EDIT')}>
+							<i class="fa-solid fa-plus" />
+						</button>
+					</li>
+				{/if}
+				{#if $state.matches('Editing')}
+					<li class="w-20 h-20 flex items-center justify-center   text-center mr-4 mb-4">
 						<input
 							type="text"
 							class="bg-stone-900 text-3xl w-full text-stone-90true0"
-							on:keydown={(e) => e.key === 'Enter' && addPerson(e)}
+							on:keydown={handleEdit}
 						/>
-					</li> -->
-				<!-- <li
-						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
-					>
-						<button on:click={showInput}>
-							<i class="fa-solid fa-plus" />
-						</button>
-					</li> -->
+					</li>
+				{/if}
 			</ul>
 		</section>
+
+		<!-- Shuffle and Save -->
 		<section class="self-center place-self-center flex flex-col items-center gap-4">
 			<p class="text-stone-100 text-xl tracking-widest">Mythical Mix</p>
+
 			<!-- big button in the center of the screeen -->
-			<button
-				class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-500
+			{#if $state.matches('Unshuffled') || $state.matches('Shuffled')}
+				<button
+					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-500
 				 hover:shadow-[0_0px_20px_1px_rgba(255,255,255,0.9)] hover:scale-110 transition-all duration-300"
-			>
-				<i class="fa-solid fa-shuffle" />
-			</button>
-			<button
-				class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
-			>
-				<i class="fa-solid fa-save" />
-			</button>
+					on:click={() => {
+						shuffled ? send('UNSHUFFLE') : send('SHUFFLE')
+						shuffled = !shuffled
+					}}
+				>
+					<i class="fa-solid fa-shuffle" />
+				</button>
+			{/if}
+
+			{#if $state.matches('Shuffled')}
+				<button
+					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
+				>
+					<i class="fa-solid fa-save" />
+				</button>
+			{/if}
 		</section>
+
 		<!-- Teams -->
 		<section class="col-start-3 col-end-4 flex flex-wrap justify-start">
 			{#each Array.from({ length: 5 }).map((_, i) => i) as team, idx}
