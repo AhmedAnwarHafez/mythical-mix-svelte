@@ -1,5 +1,5 @@
 // shuffle the people into 5 teams
-let shuffled = false
+const shuffled = false
 let people = [
 	{
 		id: 1,
@@ -9,30 +9,9 @@ let people = [
 	},
 ]
 
-export function shuffle() {
-	if (shuffled) {
-		people = people.map((person) => {
-			person.team = -1
-			return person
-		})
-		shuffled = !shuffled
-		return
-	}
-	// reset the teams
-	people = people.map((person) => {
-		person.team = -1
-		return person
-	})
-
+export function shuffle<T>(people: T[]) {
 	// shuffle the people
-	people = people.sort(() => Math.random() - 0.5)
-
-	// assign the people to teams
-	people = people.map((person, index) => {
-		person.team = Math.floor(index / 5)
-		return person
-	})
-	shuffled = !shuffled
+	return people.sort(() => Math.random() - 0.5)
 }
 
 function confirmDelete(id: number) {

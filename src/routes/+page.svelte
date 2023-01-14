@@ -36,6 +36,9 @@
 			const target = e.target as HTMLInputElement
 			send('ADD_PERSON', { payload: { name: target.value } })
 		}
+		if (e.key === 'Escape') {
+			send('CANCEL_EDIT')
+		}
 	}
 </script>
 
@@ -48,7 +51,7 @@
 		<!-- People -->
 		<section class="self-center">
 			<ul class="mt-4 w-96 flex flex-wrap">
-				{#each people.filter((person) => person.team === -1) as person (person.id)}
+				{#each $state.context.people.filter((person) => person.team === -1) as person (person.id)}
 					<li
 						in:receive={{ key: person.id }}
 						out:sendAnimation={{ key: person.id }}
@@ -80,8 +83,9 @@
 					<li class="w-20 h-20 flex items-center justify-center   text-center mr-4 mb-4">
 						<input
 							type="text"
-							class="bg-stone-900 text-3xl w-full text-stone-90true0"
+							class="bg-stone-900 text-3xl w-full text-stone-100"
 							on:keydown={handleEdit}
+							autofocus={true}
 						/>
 					</li>
 				{/if}
@@ -122,7 +126,7 @@
 					<h1 class="text-2xl font-bold text-stone-300">Team {team + 1}</h1>
 					<ul class="mt-4 flex">
 						<!-- take five people -->
-						{#each people.filter((person) => person.team === idx) as person (person.id)}
+						{#each $state.context.people.filter((person) => person.team === idx) as person (person.id)}
 							<li
 								in:receive={{ key: person.id }}
 								out:sendAnimation={{ key: person.id }}

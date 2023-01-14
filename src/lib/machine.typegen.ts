@@ -14,6 +14,7 @@ export interface Typegen0 {
 	}
 	eventsCausingActions: {
 		addPerson: 'ADD_PERSON'
+		shuffle: 'SHUFFLE'
 	}
 	eventsCausingDelays: {}
 	eventsCausingGuards: {}

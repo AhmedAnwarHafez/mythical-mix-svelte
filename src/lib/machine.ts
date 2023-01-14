@@ -1,4 +1,5 @@
 import { assign, createMachine } from 'xstate'
+import { shuffle } from './logic'
 
 export type Person = {
 	toBeDeleted: boolean
@@ -18,6 +19,7 @@ export const machine =
 					on: {
 						SHUFFLE: {
 							target: 'Shuffled',
+							actions: ['shuffle'],
 						},
 						EDIT: {
 							target: 'Editing',
@@ -60,6 +62,9 @@ export const machine =
 							target: 'Unshuffled',
 							actions: ['addPerson'],
 						},
+						CANCEL_EDIT: {
+							target: 'Unshuffled',
+						},
 					},
 				},
 			},
@@ -72,6 +77,7 @@ export const machine =
 					| { type: 'DELETE_PERSON' }
 					| { type: 'PREVIEW_HISTORY' }
 					| { type: 'EDIT' }
+					| { type: 'CANCEL_EDIT' }
 					| { type: 'ADD_PERSON'; payload: { name: string } }
 					| { type: 'EXIT_HISTORY' },
 			},
@@ -92,6 +98,15 @@ export const machine =
 							toBeDeleted: false,
 						}
 						return [...context.people, newPerson]
+					},
+				}),
+				shuffle: assign({
+					people: (context) => {
+						const shuffledPeople = shuffle(context.people)
+						return shuffledPeople.map((person, index) => ({
+							...person,
+							team: index % 2,
+						}))
 					},
 				}),
 			},
