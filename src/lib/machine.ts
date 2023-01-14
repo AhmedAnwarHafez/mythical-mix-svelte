@@ -1,6 +1,6 @@
 import { createMachine } from 'xstate'
 
-export default createMachine({
+export const machine = createMachine({
 	id: 'mythical-mix',
 	initial: 'Unshuffled',
 	states: {
@@ -9,13 +9,11 @@ export default createMachine({
 				SHUFFLE: {
 					target: 'Shuffled',
 				},
-				ADD_PERSON: {
-					target: 'Unshuffled',
-					internal: false,
+				EDIT: {
+					target: 'Editing',
 				},
 				DELETE_PERSON: {
 					target: 'Unshuffled',
-					internal: false,
 				},
 				PREVIEW_HISTORY: {
 					target: 'History Displayed',
@@ -46,16 +44,23 @@ export default createMachine({
 				},
 			},
 		},
+		Editing: {
+			on: {
+				ADD_PERSON: {
+					target: 'Unshuffled',
+				},
+			},
+		},
 	},
 	schema: {
-		// context: {} as {},
 		events: {} as
 			| { type: 'SHUFFLE' }
 			| { type: 'SAVE' }
 			| { type: 'UNSHUFLLE' }
-			| { type: 'ADD_PERSON' }
 			| { type: 'DELETE_PERSON' }
 			| { type: 'PREVIEW_HISTORY' }
+			| { type: 'EDIT' }
+			| { type: 'ADD_PERSON' }
 			| { type: 'EXIT_HISTORY' },
 	},
 	context: {},
