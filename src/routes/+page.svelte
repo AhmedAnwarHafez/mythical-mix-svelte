@@ -173,6 +173,24 @@
 	function deletePerson(id: number) {
 		people = people.filter((p) => p.id !== id)
 	}
+
+	let editing = false
+	function showInput() {
+		editing = !editing
+	}
+
+	// add a person to the list
+	function addPerson(e: KeyboardEvent) {
+		const name = (e.target as HTMLInputElement).value
+		const newPerson = {
+			id: people.length + 1,
+			name: name,
+			team: -1,
+			toBeDeleted: false,
+		}
+		people = [...people, newPerson]
+		editing = false
+	}
 </script>
 
 <section
@@ -200,12 +218,23 @@
 						{/if}
 					</li>
 				{/each}
-				<li
-					class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
-				>
-					<i class="fa-solid fa-plus" />
-				</li>
-				<!-- <input type="text" class="bg-stone-300 text-3xl w-full text-stone-900" /> -->
+				{#if editing}
+					<li class="w-20 h-20 flex items-center justify-center   text-center mr-4 mb-4">
+						<input
+							type="text"
+							class="bg-stone-900 text-3xl w-full text-stone-90true0"
+							on:keydown={(e) => e.key === 'Enter' && addPerson(e)}
+						/>
+					</li>
+				{:else}
+					<li
+						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
+					>
+						<button on:click={showInput}>
+							<i class="fa-solid fa-plus" />
+						</button>
+					</li>
+				{/if}
 			</ul>
 		</section>
 		<section class="self-center place-self-center flex flex-col items-center gap-4">
