@@ -114,10 +114,8 @@ export const machine = createMachine(
 	{
 		actions: {
 			setPeople: assign((_, event) => {
-				console.log('setPeople', event)
-
 				return {
-					people: event.data,
+					people: event.data.sort((a, b) => a.name.localeCompare(b.name)),
 				}
 			}),
 			deletePerson: assign({
