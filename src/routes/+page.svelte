@@ -5,6 +5,7 @@
 	import { useMachine } from '@xstate/svelte'
 	import { machine, type Person } from '$lib/machine'
 	import Avatar from '$lib/Avatar.svelte'
+	import { goto } from '$app/navigation'
 
 	const { state, send } = useMachine(machine, {
 		services: {
@@ -52,8 +53,6 @@
 	}
 </script>
 
-<pre class="text-white text-5xl">{$state.value}</pre>
-<!-- <pre class="text-white text-2xl">{JSON.stringify($state.context)}</pre> -->
 <section
 	class="container mx-auto flex items-center justify-center h-screen bg-stone-800 text-white"
 >
@@ -121,7 +120,10 @@
 			{#if $state.matches('Shuffled')}
 				<button
 					class="bg-stone-600 text-white rounded-full w-20 h-20 flex items-center justify-center hover:text-xl hover:bg-stone-700"
-					on:click={() => send('SAVE')}
+					on:click={() => {
+						send('SAVE')
+						goto('/history')
+					}}
 				>
 					<i class="fa-solid fa-save" />
 				</button>
