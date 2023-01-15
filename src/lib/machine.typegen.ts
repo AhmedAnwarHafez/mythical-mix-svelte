@@ -25,6 +25,7 @@ export interface Typegen0 {
 	}
 	eventsCausingActions: {
 		addPerson: 'ADD_PERSON'
+		deletePerson: 'DELETE_PERSON'
 		saveToLocalStorage: 'SAVE'
 		setPeople: 'done.invoke.loadFromLocalStorage'
 		shuffle: 'SHUFFLE'

@@ -41,6 +41,7 @@ export const machine = createMachine(
 					},
 					DELETE_PERSON: {
 						target: 'Unshuffled',
+						actions: ['deletePerson'],
 					},
 					PREVIEW_HISTORY: {
 						target: 'History Displayed',
@@ -96,7 +97,7 @@ export const machine = createMachine(
 				| { type: 'SHUFFLE' }
 				| { type: 'SAVE' }
 				| { type: 'UNSHUFFLE' }
-				| { type: 'DELETE_PERSON' }
+				| { type: 'DELETE_PERSON'; payload: { id: number } }
 				| { type: 'PREVIEW_HISTORY' }
 				| { type: 'EDIT' }
 				| { type: 'CANCEL_EDIT' }
@@ -118,6 +119,13 @@ export const machine = createMachine(
 				return {
 					people: event.data,
 				}
+			}),
+			deletePerson: assign({
+				people: (context, event) => {
+					const people = context.people.filter((person) => person.id !== event.payload.id)
+					localStorage.setItem('people', JSON.stringify(people))
+					return people
+				},
 			}),
 			addPerson: assign({
 				people: (context, event) => {

@@ -4,6 +4,7 @@
 	import { flip } from 'svelte/animate'
 	import { useMachine } from '@xstate/svelte'
 	import { machine, type Person } from '$lib/machine'
+	import Avatar from '$lib/Avatar.svelte'
 
 	const { state, send } = useMachine(machine, {
 		services: {
@@ -45,6 +46,10 @@
 			send('CANCEL_EDIT')
 		}
 	}
+
+	function handleDelete(id: number) {
+		send('DELETE_PERSON', { payload: { id } })
+	}
 </script>
 
 <pre class="text-white text-5xl">{$state.value}</pre>
@@ -58,15 +63,7 @@
 			<ul class="mt-4 w-96 flex flex-wrap">
 				{#each $state.context.people.filter((person) => person.team === -1) as person (person.id)}
 					<li in:receive={{ key: person.id }} out:sendAnimation={{ key: person.id }} animate:flip>
-						{#if person.toBeDeleted}
-							<button>
-								<i class="fa-solid fa-trash" />
-							</button>
-						{:else}
-							<button class="avatar">
-								<span>{person.name}</span>
-							</button>
-						{/if}
+						<Avatar {person} {handleDelete} />
 					</li>
 				{/each}
 
