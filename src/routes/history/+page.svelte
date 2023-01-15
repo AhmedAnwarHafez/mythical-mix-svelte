@@ -14,7 +14,7 @@
 </script>
 
 <section class="mx-auto flex items-center justify-center bg-stone-800 text-white p-10">
-	<section class="flex flex-wrap gap-10">
+	<section class="flex flex-wrap justify-evenly gap-10">
 		{#each Object.keys(history) as date, week}
 			{@const currentDate = date}
 			{@const people = history[date]}
