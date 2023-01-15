@@ -106,6 +106,7 @@
 				<button
 					class="bg-stone-600 text-stone-100 rounded-full w-32 h-32 text-4xl flex items-center justify-center hover:text-xl hover:bg-stone-500
 				 hover:shadow-[0_0px_20px_1px_rgba(255,255,255,0.9)] hover:scale-110 transition-all duration-300"
+					class:rotate-180={$state.matches('Shuffled')}
 					on:click={() => {
 						shuffled ? send('UNSHUFFLE') : send('SHUFFLE')
 						shuffled = !shuffled
