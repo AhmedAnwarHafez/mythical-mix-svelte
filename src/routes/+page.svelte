@@ -57,18 +57,13 @@
 		<section class="self-center">
 			<ul class="mt-4 w-96 flex flex-wrap">
 				{#each $state.context.people.filter((person) => person.team === -1) as person (person.id)}
-					<li
-						in:receive={{ key: person.id }}
-						out:sendAnimation={{ key: person.id }}
-						animate:flip
-						class="avatar"
-					>
+					<li in:receive={{ key: person.id }} out:sendAnimation={{ key: person.id }} animate:flip>
 						{#if person.toBeDeleted}
 							<button>
 								<i class="fa-solid fa-trash" />
 							</button>
 						{:else}
-							<button>
+							<button class="avatar">
 								<span>{person.name}</span>
 							</button>
 						{/if}
@@ -76,10 +71,11 @@
 				{/each}
 
 				{#if $state.matches('Unshuffled')}
-					<li
-						class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
-					>
-						<button on:click={() => send('EDIT')}>
+					<li>
+						<button
+							class="w-20 h-20 flex items-center justify-center bg-stone-700 rounded-full text-center mr-4 mb-4"
+							on:click={() => send('EDIT')}
+						>
 							<i class="fa-solid fa-plus" />
 						</button>
 					</li>
