@@ -113,16 +113,14 @@ export const machine = createMachine(
 	},
 	{
 		actions: {
-			setPeople: assign((_, event) => {
-				return {
-					people: event.data.sort((a, b) => a.name.localeCompare(b.name)),
-				}
-			}),
+			setPeople: assign((_, event) => ({
+				people: event.data.sort((a, b) => a.name.localeCompare(b.name)),
+			})),
 			deletePerson: assign({
 				people: (context, event) => {
 					const people = context.people.filter((person) => person.id !== event.payload.id)
 					localStorage.setItem('people', JSON.stringify(people))
-					return people
+					return people.sort((a, b) => a.name.localeCompare(b.name))
 				},
 			}),
 			addPerson: assign({
@@ -136,23 +134,20 @@ export const machine = createMachine(
 
 					const people = [...context.people, newPerson]
 					localStorage.setItem('people', JSON.stringify(people))
-					return people
+					return people.sort((a, b) => a.name.localeCompare(b.name))
 				},
 			}),
 			shuffle: assign({
-				people: (context) => {
-					return shuffle(context.people)
-				},
+				people: (context) => shuffle(context.people),
 			}),
 			unshuffle: assign({
-				people: (context) => {
-					return context.people.map((person) => {
-						return {
+				people: (context) =>
+					context.people
+						.map((person) => ({
 							...person,
 							team: -1,
-						}
-					})
-				},
+						}))
+						.sort((a, b) => a.name.localeCompare(b.name)),
 			}),
 			saveToLocalStorage: (context) => {
 				const today = new Date().toISOString().split('T')[0]
